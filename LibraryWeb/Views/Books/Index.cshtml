@@ -1,0 +1,26 @@
+﻿@model IEnumerable<LibraryWeb.Data.Book>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Всички налични книги</h1>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-3">
+            <div class="card my-2 store-card">
+                <a class="a-cleanup" asp-controller="Books" asp-action="Details" asp-route-id="@item.Id">
+                    <img src="/Images/book.png" class="card-img-top card-img-custom">
+                    <div class="card-body">
+                        <h5 class="mb-3">@item.Title</h5>
+                        <h6 class="mb-3">@item.AuthorName</h6>
+                    </div>
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+
+
