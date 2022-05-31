@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using LibraryWebApp.Models.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace LibraryWebApp.Areas.Identity.Data
@@ -23,6 +24,8 @@ namespace LibraryWebApp.Areas.Identity.Data
         public string Avatar { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime RegisterDate { get; set; }
+
+        public ICollection<ReaderCard> ReaderCards { get; set; }
 
     }
 }

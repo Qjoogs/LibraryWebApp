@@ -94,6 +94,7 @@ namespace LibraryWebApp.Areas.Identity.Pages.Account
                     FirstName = Input.FirstName,
                     MiddleName = Input.MiddleName,
                     LastName = Input.LastName,
+                    RegisterDate = DateTime.Now,
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
@@ -123,7 +124,8 @@ namespace LibraryWebApp.Areas.Identity.Pages.Account
                 }
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                  
+                    ModelState.AddModelError(string.Empty, error.Description); // nqkva greshka
                 }
             }
 

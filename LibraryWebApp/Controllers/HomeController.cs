@@ -1,4 +1,5 @@
 ﻿using LibraryWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -23,10 +24,14 @@ namespace LibraryWebApp.Controllers
             return View();
         }
 
+       [Authorize(Roles ="Admin")]
         public IActionResult Privacy()
         {
             return View();
         }
+
+       
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -53,6 +53,22 @@ namespace LibraryWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ReaderCards",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    GetBookDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReturnBookDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReaderCards", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -158,6 +174,59 @@ namespace LibraryWebApp.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ApplicationUserReaderCard",
+                columns: table => new
+                {
+                    ReaderCardsId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserReaderCard", x => new { x.ReaderCardsId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserReaderCard_AspNetUsers_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserReaderCard_ReaderCards_ReaderCardsId",
+                        column: x => x.ReaderCardsId,
+                        principalTable: "ReaderCards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    AuthorName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    PublisherName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    GenreName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReaderCardId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Books_ReaderCards_ReaderCardId",
+                        column: x => x.ReaderCardId,
+                        principalTable: "ReaderCards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserReaderCard_UsersId",
+                table: "ApplicationUserReaderCard",
+                column: "UsersId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -196,10 +265,18 @@ namespace LibraryWebApp.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_ReaderCardId",
+                table: "Books",
+                column: "ReaderCardId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ApplicationUserReaderCard");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -216,10 +293,16 @@ namespace LibraryWebApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Books");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "ReaderCards");
         }
     }
 }
